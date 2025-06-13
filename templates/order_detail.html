@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Order Details</h1>
+
+    <div class="mb-4 p-4 border rounded shadow-sm bg-light">
+        <h3>Order Information</h3>
+        <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+        <p><strong>Total Price:</strong> {{ order.total_price }} TL</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+    </div>
+
+    <div class="mb-4 p-4 border rounded shadow-sm bg-light">
+        <h3>Card Information</h3>
+        <p><strong>Card Holder:</strong> {{ order.card_holder }}</p>
+        <p><strong>Card Number:</strong> **** **** **** {{ order.card_last4 }}</p>
+    </div>
+
+    <div class="mb-4 p-4 border rounded shadow-sm bg-light">
+        <h3>Address</h3>
+        <p><strong>Street:</strong> {{ order.address_street }}</p>
+        <p><strong>City:</strong> {{ order.address_city }}</p>
+        <p><strong>State:</strong> {{ order.address_state }}</p>
+        <p><strong>Zip Code:</strong> {{ order.address_zip }}</p>
+    </div>
+
+    <div class="mb-4 p-4 border rounded shadow-sm bg-light">
+        <h3>Items</h3>
+        <ul class="list-group">
+            {% for item in order.items.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ item.product.name }} - Quantity: {{ item.quantity }}</span>
+                <span>Price: {{ item.price }} TL</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'account' %}" class="btn btn-secondary">Back to Account</a>
+    </div>
+</div>
+{% endblock %}

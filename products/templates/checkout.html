@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Checkout</h1>
+    <form method="post" class="p-4 border rounded shadow-sm bg-light">
+        {% csrf_token %}
+
+        <h3 class="mb-3">Select Address</h3>
+        {% if addresses %}
+        <div class="list-group mb-4">
+            {% for address in addresses %}
+            <label class="list-group-item">
+                <input type="radio" name="address" value="{{ address.id }}" required class="form-check-input me-2">
+                {{ address.street }}, {{ address.city }}, {{ address.state }}, {{ address.country }}
+            </label>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-danger">No addresses available. Please add one to proceed.</p>
+        <button onclick="location.href='{% url 'add_address' %}'" type="button" class="btn btn-secondary">Add Address</button>
+        {% endif %}
+
+        <h3 class="mb-3">Select Card</h3>
+        {% if cards %}
+        <div class="list-group mb-4">
+            {% for card in cards %}
+            <label class="list-group-item">
+                <input type="radio" name="card" value="{{ card.id }}" required class="form-check-input me-2">
+                {{ card.cardholder_name }} - Card ending in {{ card.card_number|slice:"-4:" }}
+            </label>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-danger">No cards available. Please add one to proceed.</p>
+        <button onclick="location.href='{% url 'add_card' %}'" type="button" class="btn btn-secondary">Add Card</button>
+        {% endif %}
+
+        {% if addresses and cards %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
+        </div>
+        {% else %}
+        <p class="text-warning text-center">You cannot proceed without an address and a card.</p>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

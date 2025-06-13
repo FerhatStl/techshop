@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Account Page</h1>
+
+    <div class="mb-4 p-4 border rounded shadow-sm bg-light">
+        <h3>User Information</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Full Name:</strong> {{ user.get_full_name }}</p>
+    </div>
+
+    <div class="mb-4">
+        <h3>Your Orders</h3>
+        {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p><strong>Date:</strong> {{ order.created_at }}</p>
+                        <p><strong>Total Price:</strong> {{ order.total_price }} TL</p>
+                        <p><strong>Status:</strong> {{ order.status }}</p>
+                        <a href="{% url 'order_detail' order.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-warning">You have no orders.</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <h3>Addresses</h3>
+        {% if addresses %}
+        <div class="list-group">
+            {% for address in addresses %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ address.street }}, {{ address.city }}, {{ address.state }}, {{ address.country }}</span>
+                <form method="POST" action="{% url 'delete_address' address.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-warning">No addresses available.</p>
+        {% endif %}
+        <button onclick="location.href='{% url 'add_address' %}'" class="btn btn-secondary mt-2">Add Address</button>
+    </div>
+
+    <div class="mb-4">
+        <h3>Cards</h3>
+        {% if cards %}
+        <div class="list-group">
+            {% for card in cards %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ card.cardholder_name }} - Card ending in {{ card.card_number|slice:"-4:" }}</span>
+                <form method="POST" action="{% url 'delete_card' card.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-warning">No cards available.</p>
+        {% endif %}
+        <button onclick="location.href='{% url 'add_card' %}'" class="btn btn-secondary mt-2">Add Card</button>
+    </div>
+</div>
+{% endblock %}

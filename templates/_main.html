@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">All Products</h1>
+    <div class="row">
+        {% if products %}
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="/media/{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="width: 100%; max-height: 300px; object-fit: contain;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">Price: <strong>{{ product.price|floatformat:2 }} TL</strong></p>
+                        <p class="card-text text-muted">Stock: {{ product.stock }}</p>
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="mt-auto">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center d-flex justify-content-center align-items-center" style="height: 70vh;">
+                <div class="text-muted">No products available.</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

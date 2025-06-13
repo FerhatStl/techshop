@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Shopping Cart</h1>
+<div class="container mt-4">
+    {% if cart_items %}
+        <div class="list-group">
+            {% for item in cart_items %}
+            <div class="list-group-item d-flex align-items-center">
+                <img src="/media/{{ item.image_url }}" alt="{{ item.name }}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+                <div>
+                    <h5 class="mb-1">{{ item.name }}</h5>
+                    <p class="mb-1">Price: {{ item.price|floatformat:2 }} TL</p>
+                </div>
+                <button class="btn btn-danger btn-sm ml-auto remove-item" data-item-id="{{ item.id }}">Remove</button>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/checkout/" class="btn btn-success mt-3">Proceed to Checkout</a>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                fetch(`/cart/remove/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        this.closest('.list-group-item').remove();
+                    } else {
+                        alert('Failed to remove item.');
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

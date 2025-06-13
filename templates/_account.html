@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to your account page, {{ user.username }}!</h1>
+
+<h2>Your Orders</h2>
+<ul>
+    {% for order in orders %}
+    <li>
+        <strong>Order ID:</strong> {{ order.id }}<br>
+        <strong>Date:</strong> {{ order.created_at }}<br>
+        <strong>Total Price:</strong> ${{ order.total_price }}<br>
+        <strong>Status:</strong> {{ order.status }}<br>
+    </li>
+    {% empty %}
+    <li>You have no orders.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

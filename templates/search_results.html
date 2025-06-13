@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Search Results</h1>
+    <div class="row">
+        {% if products %}
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="/media/{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="width: 100%; max-height: 300px; object-fit: contain;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">Price: <strong>{{ product.price|floatformat:2 }} TL</strong></p>
+                        <p class="card-text text-muted">Stock: {{ product.stock }}</p>
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="mt-auto">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center" style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+                <div class="tenor-gif-embed" data-postid="16431834" data-share-method="host" data-aspect-ratio="1.33333" data-width="50%" style="max-width: 300px;">
+                    <a href="https://tenor.com/view/john-travolta-what-confused-gif-16431834">John Travolta What GIF</a> 
+                    from <a href="https://tenor.com/search/john+travolta-gifs">John Travolta GIFs</a>
+                </div>
+                <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
